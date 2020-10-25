@@ -49,12 +49,12 @@ jobs:
         MY_SECRET=$(jq -r '.inputs.GCLOUD_KEY' $GITHUB_EVENT_PATH)	
         echo "::add-mask::$MY_SECRET"
         echo ${#MY_SECRET}
-    #- name: Setup GCP
-    #  uses: GoogleCloudPlatform/github-actions/setup-gcloud@master
-    #  if: github.event.inputs.GCLOUD_KEY
-    #  with:
-    #    service_account_key: ${{ github.event.inputs.GCLOUD_KEY }}
-    #    export_default_credentials: true
+    - name: Setup GCP
+      uses: GoogleCloudPlatform/github-actions/setup-gcloud@master
+      if: github.event.inputs.GCLOUD_KEY
+      with:
+        service_account_key: ${MY_SECRET}
+        export_default_credentials: true
     #- name: Deploy application
     #  if: github.event.inputs.GCLOUD_KEY
     #  run: ./src/tools/scripts/deploy.sh -n
