@@ -54,11 +54,15 @@ jobs:
       if: github.event.inputs.GCLOUD_KEY	
       run: |
         echo ${#MY_SECRET}
+    - name: Test Secret Length 2
+      if: github.event.inputs.GCLOUD_KEY	
+      run: |
+        echo ${#MY_SECRET}
     - name: Setup GCP
       uses: GoogleCloudPlatform/github-actions/setup-gcloud@master
       if: github.event.inputs.GCLOUD_KEY
       with:
-        service_account_key: ${{ env.MY_SECRET }}
+        service_account_key: ${MY_SECRET}
         export_default_credentials: true
         #- name: Deploy application
         #  if: github.event.inputs.GCLOUD_KEY
