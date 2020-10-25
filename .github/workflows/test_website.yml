@@ -19,41 +19,42 @@ jobs:
     runs-on: ubuntu-latest
     if: github.repository == 'HTTPArchive/almanac.httparchive.org'
     steps:
-    - name: Checkout branch
-      uses: actions/checkout@v2.3.3
-      with:
-        # Full git history is needed to get a proper list of changed files within `super-linter`
-        fetch-depth: 0
-    - name: Setup Node.js for use with actions
-      uses: actions/setup-node@v1.4.2
-      with:
-        node-version: 12.x
-    - name: Set up Python 3.8
-      uses: actions/setup-python@v2.1.4
-      with:
-        python-version: '3.8'
-    - name: Run the website
-      run: ./src/tools/scripts/run_and_test_website.sh
-    - name: Remove node modules to avoid linting errors
-      run: rm -rf src/node_modules
-    - name: Lint Generated HTML
-      uses: github/super-linter@v3.13.2
-      env:
-        DEFAULT_BRANCH: main
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        VALIDATE_HTML: true
-    - name: Mask GCP Key to prevent it being logged
-      if: github.event.inputs.GCLOUD_STAGING_KEY	
-      run: |	
-        echo "Masking key from logs"	
-        GCLOUD_KEY=$(jq -r '.inputs.GCLOUD_STAGING_KEY' $GITHUB_EVENT_PATH)	
-        echo "::add-mask::${GCLOUD_KEY}"
-    - name: Setup GCP
-      uses: GoogleCloudPlatform/github-actions/setup-gcloud@master
-      if: github.event.inputs.GCLOUD_STAGING_KEY
-      with:
-        service_account_key: ${{ github.event.inputs.GCLOUD_STAGING_KEY }}
-        export_default_credentials: true
-    - name: Deploy application
-      if: github.event.inputs.GCLOUD_STAGING_KEY
-      run: ./src/tools/scripts/deploy.sh -n
+      - name: Checkout branch
+        uses: actions/checkout@v2.3.3
+        with:
+          # Full git history is needed to get a proper list of changed files
+          # For the GitHub Super-Linter
+          fetch-depth: 0
+      - name: Setup Node.js for use with actions
+        uses: actions/setup-node@v1.4.2
+        with:
+          node-version: 12.x
+      - name: Set up Python 3.8
+        uses: actions/setup-python@v2.1.4
+        with:
+          python-version: '3.8'
+      - name: Run the website
+        run: ./src/tools/scripts/run_and_test_website.sh
+      - name: Remove node modules to avoid linting errors
+        run: rm -rf src/node_modules
+      - name: Lint Generated HTML
+        uses: github/super-linter@v3.13.2
+        env:
+          DEFAULT_BRANCH: main
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          VALIDATE_HTML: true
+      - name: Mask GCP Key to prevent it being logged
+        if: github.event.inputs.GCLOUD_STAGING_KEY
+        run: |
+          echo "Masking key from logs"	
+          GCLOUD_KEY=$(jq -r '.inputs.GCLOUD_STAGING_KEY' $GITHUB_EVENT_PATH)	
+          echo "::add-mask::${GCLOUD_KEY}"
+      - name: Setup GCP
+        uses: GoogleCloudPlatform/github-actions/setup-gcloud@master
+        if: github.event.inputs.GCLOUD_STAGING_KEY
+        with:
+          service_account_key: ${{ github.event.inputs.GCLOUD_STAGING_KEY }}
+          export_default_credentials: true
+      - name: Deploy application
+        if: github.event.inputs.GCLOUD_STAGING_KEY
+        run: ./src/tools/scripts/deploy.sh -n
