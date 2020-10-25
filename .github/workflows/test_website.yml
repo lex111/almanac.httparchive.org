@@ -50,5 +50,4 @@ jobs:
         export_default_credentials: true
     - name: Deploy application
       if: github.event.inputs.TEST_DEPLOY
-      run: |
-        run: ./src/tools/scripts/deploy.sh -n
+      run: ./src/tools/scripts/deploy.sh -n
