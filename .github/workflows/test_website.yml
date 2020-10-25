@@ -62,7 +62,7 @@ jobs:
       uses: GoogleCloudPlatform/github-actions/setup-gcloud@master
       if: github.event.inputs.GCLOUD_KEY
       with:
-        service_account_key: ${MY_SECRET}
+        service_account_key: "${MY_SECRET}"
         export_default_credentials: true
         #- name: Deploy application
         #  if: github.event.inputs.GCLOUD_KEY
