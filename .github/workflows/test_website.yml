@@ -47,7 +47,8 @@ jobs:
       if: github.event.inputs.GCLOUD_KEY
       run: |
         echo "Masking key from logs"
-        echo "::add-mask::${{ github.event.inputs.GCLOUD_KEY }}"
+        MY_SECRET=$(jq -r '.inputs.GCLOUD_KEY' $GITHUB_EVENT_PATH)
+        echo "::add-mask::$MY_SECRET"
     - name: Setup GCP
       uses: GoogleCloudPlatform/github-actions/setup-gcloud@master
       if: github.event.inputs.GCLOUD_KEY
