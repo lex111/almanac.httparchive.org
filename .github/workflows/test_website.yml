@@ -33,16 +33,16 @@ jobs:
       with:
         python-version: '3.8'
     - name: Run the website
-      #run: ./src/tools/scripts/run_and_test_website.sh
+      run: ./src/tools/scripts/run_and_test_website.sh
       run: echo "Skipping this step for now"
     - name: Remove node modules to avoid linting errors
       run: rm -rf src/node_modules
-    #- name: Lint Generated HTML
-    #  uses: github/super-linter@v3.13.2
-    #  env:
-    #    DEFAULT_BRANCH: main
-    #    GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-    #    VALIDATE_HTML: true
+    - name: Lint Generated HTML
+      uses: github/super-linter@v3.13.2
+      env:
+        DEFAULT_BRANCH: main
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        VALIDATE_HTML: true
     - name: Mask GCP Key
       if: github.event.inputs.GCLOUD_KEY
       run: |
@@ -58,4 +58,4 @@ jobs:
     - name: Deploy application
       if: github.event.inputs.GCLOUD_KEY
       run: |
-        echo "$GOOGLE_APPLICATION_CREDENTIALS"
+        run: ./src/tools/scripts/deploy.sh -n
