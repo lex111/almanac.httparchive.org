@@ -49,6 +49,10 @@ jobs:
         MY_SECRET=$(jq -r '.inputs.GCLOUD_KEY' $GITHUB_EVENT_PATH)	
         echo "::add-mask::${MY_SECRET}"
         echo "MY_SECRET=${MY_SECRET}" >> $GITHUB_ENV
+    - name: Test Secret Length
+      if: github.event.inputs.GCLOUD_KEY	
+      run: |	
+        echo ${#MY_SECRET}
     - name: Setup GCP
       uses: GoogleCloudPlatform/github-actions/setup-gcloud@master
       if: github.event.inputs.GCLOUD_KEY
