@@ -10,7 +10,7 @@ on:
   workflow_dispatch:
     inputs:
       GCLOUD_STAGING_KEY:
-        description: 'Optional Flag to Trigger a Test Deploy'
+        description: 'Optional GCP Staging Key to trigger a test deploy'
         required: false
   pull_request:
 jobs:
